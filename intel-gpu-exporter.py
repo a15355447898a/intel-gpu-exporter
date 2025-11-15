@@ -5,44 +5,54 @@ import subprocess
 import json
 import logging
 
-igpu_engines_blitter_0_busy = Gauge(
-    "igpu_engines_blitter_0_busy", "Blitter 0 busy utilisation %"
+igpu_engines_blitter_busy = Gauge(
+    "igpu_engines_blitter_busy", "Blitter busy utilisation %"
 )
-igpu_engines_blitter_0_sema = Gauge(
-    "igpu_engines_blitter_0_sema", "Blitter 0 sema utilisation %"
+igpu_engines_blitter_sema = Gauge(
+    "igpu_engines_blitter_sema", "Blitter sema utilisation %"
 )
-igpu_engines_blitter_0_wait = Gauge(
-    "igpu_engines_blitter_0_wait", "Blitter 0 wait utilisation %"
-)
-
-igpu_engines_render_3d_0_busy = Gauge(
-    "igpu_engines_render_3d_0_busy", "Render 3D 0 busy utilisation %"
-)
-igpu_engines_render_3d_0_sema = Gauge(
-    "igpu_engines_render_3d_0_sema", "Render 3D 0 sema utilisation %"
-)
-igpu_engines_render_3d_0_wait = Gauge(
-    "igpu_engines_render_3d_0_wait", "Render 3D 0 wait utilisation %"
+igpu_engines_blitter_wait = Gauge(
+    "igpu_engines_blitter_wait", "Blitter wait utilisation %"
 )
 
-igpu_engines_video_0_busy = Gauge(
-    "igpu_engines_video_0_busy", "Video 0 busy utilisation %"
+igpu_engines_render_3d_busy = Gauge(
+    "igpu_engines_render_3d_busy", "Render 3D busy utilisation %"
 )
-igpu_engines_video_0_sema = Gauge(
-    "igpu_engines_video_0_sema", "Video 0 sema utilisation %"
+igpu_engines_render_3d_sema = Gauge(
+    "igpu_engines_render_3d_sema", "Render 3D sema utilisation %"
 )
-igpu_engines_video_0_wait = Gauge(
-    "igpu_engines_video_0_wait", "Video 0 wait utilisation %"
+igpu_engines_render_3d_wait = Gauge(
+    "igpu_engines_render_3d_wait", "Render 3D wait utilisation %"
 )
 
-igpu_engines_video_enhance_0_busy = Gauge(
-    "igpu_engines_video_enhance_0_busy", "Video Enhance 0 busy utilisation %"
+igpu_engines_video_busy = Gauge(
+    "igpu_engines_video_busy", "Video busy utilisation %"
 )
-igpu_engines_video_enhance_0_sema = Gauge(
-    "igpu_engines_video_enhance_0_sema", "Video Enhance 0 sema utilisation %"
+igpu_engines_video_sema = Gauge(
+    "igpu_engines_video_sema", "Video sema utilisation %"
 )
-igpu_engines_video_enhance_0_wait = Gauge(
-    "igpu_engines_video_enhance_0_wait", "Video Enhance 0 wait utilisation %"
+igpu_engines_video_wait = Gauge(
+    "igpu_engines_video_wait", "Video wait utilisation %"
+)
+
+igpu_engines_video_enhance_busy = Gauge(
+    "igpu_engines_video_enhance_busy", "Video Enhance busy utilisation %"
+)
+igpu_engines_video_enhance_sema = Gauge(
+    "igpu_engines_video_enhance_sema", "Video Enhance sema utilisation %"
+)
+igpu_engines_video_enhance_wait = Gauge(
+    "igpu_engines_video_enhance_wait", "Video Enhance wait utilisation %"
+)
+
+igpu_engines_compute_busy = Gauge(
+    "igpu_engines_compute_busy", "Compute busy utilisation %"
+)
+igpu_engines_compute_sema = Gauge(
+    "igpu_engines_compute_sema", "Compute sema utilisation %"
+)
+igpu_engines_compute_wait = Gauge(
+    "igpu_engines_compute_wait", "Compute wait utilisation %"
 )
 
 igpu_frequency_actual = Gauge("igpu_frequency_actual", "Frequency actual MHz")
@@ -62,44 +72,54 @@ igpu_rc6 = Gauge("igpu_rc6", "RC6 %")
 
 
 def update(data):
-    igpu_engines_blitter_0_busy.set(
-        data.get("engines", {}).get("Blitter/0", {}).get("busy", 0.0)
+    igpu_engines_blitter_busy.set(
+        data.get("engines", {}).get("Blitter", {}).get("busy", 0.0)
     )
-    igpu_engines_blitter_0_sema.set(
-        data.get("engines", {}).get("Blitter/0", {}).get("sema", 0.0)
+    igpu_engines_blitter_sema.set(
+        data.get("engines", {}).get("Blitter", {}).get("sema", 0.0)
     )
-    igpu_engines_blitter_0_wait.set(
-        data.get("engines", {}).get("Blitter/0", {}).get("wait", 0.0)
-    )
-
-    igpu_engines_render_3d_0_busy.set(
-        data.get("engines", {}).get("Render/3D/0", {}).get("busy", 0.0)
-    )
-    igpu_engines_render_3d_0_sema.set(
-        data.get("engines", {}).get("Render/3D/0", {}).get("sema", 0.0)
-    )
-    igpu_engines_render_3d_0_wait.set(
-        data.get("engines", {}).get("Render/3D/0", {}).get("wait", 0.0)
+    igpu_engines_blitter_wait.set(
+        data.get("engines", {}).get("Blitter", {}).get("wait", 0.0)
     )
 
-    igpu_engines_video_0_busy.set(
-        data.get("engines", {}).get("Video/0", {}).get("busy", 0.0)
+    igpu_engines_render_3d_busy.set(
+        data.get("engines", {}).get("Render/3D", {}).get("busy", 0.0)
     )
-    igpu_engines_video_0_sema.set(
-        data.get("engines", {}).get("Video/0", {}).get("sema", 0.0)
+    igpu_engines_render_3d_sema.set(
+        data.get("engines", {}).get("Render/3D", {}).get("sema", 0.0)
     )
-    igpu_engines_video_0_wait.set(
-        data.get("engines", {}).get("Video/0", {}).get("wait", 0.0)
+    igpu_engines_render_3d_wait.set(
+        data.get("engines", {}).get("Render/3D", {}).get("wait", 0.0)
     )
 
-    igpu_engines_video_enhance_0_busy.set(
-        data.get("engines", {}).get("VideoEnhance/0", {}).get("busy", 0.0)
+    igpu_engines_video_busy.set(
+        data.get("engines", {}).get("Video", {}).get("busy", 0.0)
     )
-    igpu_engines_video_enhance_0_sema.set(
-        data.get("engines", {}).get("VideoEnhance/0", {}).get("sema", 0.0)
+    igpu_engines_video_sema.set(
+        data.get("engines", {}).get("Video", {}).get("sema", 0.0)
     )
-    igpu_engines_video_enhance_0_wait.set(
-        data.get("engines", {}).get("VideoEnhance/0", {}).get("wait", 0.0)
+    igpu_engines_video_wait.set(
+        data.get("engines", {}).get("Video", {}).get("wait", 0.0)
+    )
+
+    igpu_engines_video_enhance_busy.set(
+        data.get("engines", {}).get("VideoEnhance", {}).get("busy", 0.0)
+    )
+    igpu_engines_video_enhance_sema.set(
+        data.get("engines", {}).get("VideoEnhance", {}).get("sema", 0.0)
+    )
+    igpu_engines_video_enhance_wait.set(
+        data.get("engines", {}).get("VideoEnhance", {}).get("wait", 0.0)
+    )
+
+    igpu_engines_compute_busy.set(
+        data.get("engines", {}).get("Compute", {}).get("busy", 0.0)
+    )
+    igpu_engines_compute_sema.set(
+        data.get("engines", {}).get("Compute", {}).get("sema", 0.0)
+    )
+    igpu_engines_compute_wait.set(
+        data.get("engines", {}).get("Compute", {}).get("wait", 0.0)
     )
 
     igpu_frequency_actual.set(data.get("frequency", {}).get("actual", 0))
@@ -142,26 +162,31 @@ if __name__ == "__main__":
     logging.info("Started " + cmd)
     output = ""
 
-    if os.getenv("IS_DOCKER", False):
-        for line in process.stdout:
-            line = line.decode("utf-8").strip()
-            output += line
+    object_buffer = ""
+    brace_level = 0
+    while process.poll() is None:
+        char = process.stdout.read(1).decode("utf-8")
+        if not char:
+            break
 
-            try:
-                data = json.loads(output.strip(","))
-                logging.debug(data)
-                update(data)
-                output = ""
-            except json.JSONDecodeError:
-                continue
-    else:
-        while process.poll() is None:
-            read = process.stdout.readline()
-            output += read.decode("utf-8")
-            logging.debug(output)
-            if read == b"},\n":
-                update(json.loads(output[:-2]))
-                output = ""
+        if char == '{':
+            brace_level += 1
+
+        if brace_level > 0:
+            object_buffer += char
+
+        if char == '}':
+            brace_level -= 1
+            if brace_level == 0 and object_buffer:
+                try:
+                    data = json.loads(object_buffer)
+                    logging.debug(data)
+                    update(data)
+                except json.JSONDecodeError as e:
+                    logging.error(f"JSON decode error: {e} on buffer: {object_buffer}")
+                finally:
+                    # Reset buffer for the next object
+                    object_buffer = ""
 
     process.kill()
 

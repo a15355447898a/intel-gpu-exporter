@@ -1,22 +1,29 @@
 # intel-gpu-exporter
 
-> [!IMPORTANT]
-> I am no longer using this, and have no plans to continue support. Please consider forking if interested in using.
+> [!NOTE]
+> This is a fork of the original `onedr0p/intel-gpu-exporter` which appears to be no longer maintained. This version has been updated to support newer versions of `intel-gpu-tools`.
 
-Get metrics from Intel GPUs
+## Recent Changes
+This version includes several key fixes:
+- **Updated Metric Parsing**: The script now correctly parses the JSON output from newer versions of `intel_gpu_top` where engine names (e.g., `Render/3D`) do not have a `/0` suffix.
+- **Added Compute Metric**: Support for the `Compute` engine has been added.
+- **Robust JSON Streaming**: The JSON parsing logic was completely rewritten to be more robust, correctly handling streaming JSON arrays from `intel_gpu_top` to prevent errors.
+- **Updated Grafana Dashboard**: The Grafana dashboard JSON has been updated to match the new metric names and includes a panel for the new `Compute` metric.
 
 ## Deployment
 
-Runs on port 8080, does stuff, is hyperglued using python and intel_gpu_top
+Runs on port 8080, using python and `intel_gpu_top` to export metrics for Prometheus.
 
 ### Docker Compose
 
+To build and run your local, modified version:
 ```yaml
 version: "3.8"
 
 services:
   intel-gpu-exporter:
-    image: ghcr.io/onedr0p/intel-gpu-exporter:rolling
+    build: .
+    image: intel-gpu-exporter:custom
     container_name: intel-gpu-exporter
     restart: unless-stopped
     privileged: true
@@ -29,43 +36,54 @@ services:
 
 ## Metrics
 
+The following metrics are exposed:
+
 ```bash
-# HELP igpu_engines_blitter_0_busy Blitter 0 busy utilisation %
-# TYPE igpu_engines_blitter_0_busy gauge
-igpu_engines_blitter_0_busy 0.0
-# HELP igpu_engines_blitter_0_sema Blitter 0 sema utilisation %
-# TYPE igpu_engines_blitter_0_sema gauge
-igpu_engines_blitter_0_sema 0.0
-# HELP igpu_engines_blitter_0_wait Blitter 0 wait utilisation %
-# TYPE igpu_engines_blitter_0_wait gauge
-igpu_engines_blitter_0_wait 0.0
-# HELP igpu_engines_render_3d_0_busy Render 3D 0 busy utilisation %
-# TYPE igpu_engines_render_3d_0_busy gauge
-igpu_engines_render_3d_0_busy 0.0
-# HELP igpu_engines_render_3d_0_sema Render 3D 0 sema utilisation %
-# TYPE igpu_engines_render_3d_0_sema gauge
-igpu_engines_render_3d_0_sema 0.0
-# HELP igpu_engines_render_3d_0_wait Render 3D 0 wait utilisation %
-# TYPE igpu_engines_render_3d_0_wait gauge
-igpu_engines_render_3d_0_wait 0.0
-# HELP igpu_engines_video_0_busy Video 0 busy utilisation %
-# TYPE igpu_engines_video_0_busy gauge
-igpu_engines_video_0_busy 0.0
-# HELP igpu_engines_video_0_sema Video 0 sema utilisation %
-# TYPE igpu_engines_video_0_sema gauge
-igpu_engines_video_0_sema 0.0
-# HELP igpu_engines_video_0_wait Video 0 wait utilisation %
-# TYPE igpu_engines_video_0_wait gauge
-igpu_engines_video_0_wait 0.0
-# HELP igpu_engines_video_enhance_0_busy Video Enhance 0 busy utilisation %
-# TYPE igpu_engines_video_enhance_0_busy gauge
-igpu_engines_video_enhance_0_busy 0.0
-# HELP igpu_engines_video_enhance_0_sema Video Enhance 0 sema utilisation %
-# TYPE igpu_engines_video_enhance_0_sema gauge
-igpu_engines_video_enhance_0_sema 0.0
-# HELP igpu_engines_video_enhance_0_wait Video Enhance 0 wait utilisation %
-# TYPE igpu_engines_video_enhance_0_wait gauge
-igpu_engines_video_enhance_0_wait 0.0
+# HELP igpu_engines_blitter_busy Blitter busy utilisation %
+# TYPE igpu_engines_blitter_busy gauge
+igpu_engines_blitter_busy 0.0
+# HELP igpu_engines_blitter_sema Blitter sema utilisation %
+# TYPE igpu_engines_blitter_sema gauge
+igpu_engines_blitter_sema 0.0
+# HELP igpu_engines_blitter_wait Blitter wait utilisation %
+# TYPE igpu_engines_blitter_wait gauge
+igpu_engines_blitter_wait 0.0
+# HELP igpu_engines_render_3d_busy Render 3D busy utilisation %
+# TYPE igpu_engines_render_3d_busy gauge
+igpu_engines_render_3d_busy 0.0
+# HELP igpu_engines_render_3d_sema Render 3D sema utilisation %
+# TYPE igpu_engines_render_3d_sema gauge
+igpu_engines_render_3d_sema 0.0
+# HELP igpu_engines_render_3d_wait Render 3D wait utilisation %
+# TYPE igpu_engines_render_3d_wait gauge
+igpu_engines_render_3d_wait 0.0
+# HELP igpu_engines_video_busy Video busy utilisation %
+# TYPE igpu_engines_video_busy gauge
+igpu_engines_video_busy 0.0
+# HELP igpu_engines_video_sema Video sema utilisation %
+# TYPE igpu_engines_video_sema gauge
+igpu_engines_video_sema 0.0
+# HELP igpu_engines_video_wait Video wait utilisation %
+# TYPE igpu_engines_video_wait gauge
+igpu_engines_video_wait 0.0
+# HELP igpu_engines_video_enhance_busy Video Enhance busy utilisation %
+# TYPE igpu_engines_video_enhance_busy gauge
+igpu_engines_video_enhance_busy 0.0
+# HELP igpu_engines_video_enhance_sema Video Enhance sema utilisation %
+# TYPE igpu_engines_video_enhance_sema gauge
+igpu_engines_video_enhance_sema 0.0
+# HELP igpu_engines_video_enhance_wait Video Enhance wait utilisation %
+# TYPE igpu_engines_video_enhance_wait gauge
+igpu_engines_video_enhance_wait 0.0
+# HELP igpu_engines_compute_busy Compute busy utilisation %
+# TYPE igpu_engines_compute_busy gauge
+igpu_engines_compute_busy 0.0
+# HELP igpu_engines_compute_sema Compute sema utilisation %
+# TYPE igpu_engines_compute_sema gauge
+igpu_engines_compute_sema 0.0
+# HELP igpu_engines_compute_wait Compute wait utilisation %
+# TYPE igpu_engines_compute_wait gauge
+igpu_engines_compute_wait 0.0
 # HELP igpu_frequency_actual Frequency actual MHz
 # TYPE igpu_frequency_actual gauge
 igpu_frequency_actual 0.0
@@ -74,23 +92,23 @@ igpu_frequency_actual 0.0
 igpu_frequency_requested 0.0
 # HELP igpu_imc_bandwidth_reads IMC reads MiB/s
 # TYPE igpu_imc_bandwidth_reads gauge
-igpu_imc_bandwidth_reads 733.353818
+igpu_imc_bandwidth_reads 0.0
 # HELP igpu_imc_bandwidth_writes IMC writes MiB/s
 # TYPE igpu_imc_bandwidth_writes gauge
-igpu_imc_bandwidth_writes 166.044782
+igpu_imc_bandwidth_writes 0.0
 # HELP igpu_interrupts Interrupts/s
 # TYPE igpu_interrupts gauge
 igpu_interrupts 0.0
 # HELP igpu_period Period ms
 # TYPE igpu_period gauge
-igpu_period 5000.241296
+igpu_period 0.0
 # HELP igpu_power_gpu GPU power W
 # TYPE igpu_power_gpu gauge
 igpu_power_gpu 0.0
 # HELP igpu_power_package Package power W
 # TYPE igpu_power_package gauge
-igpu_power_package 5.480595
+igpu_power_package 0.0
 # HELP igpu_rc6 RC6 %
 # TYPE igpu_rc6 gauge
-igpu_rc6 99.999993
+igpu_rc6 0.0
 ```
