@@ -34,6 +34,8 @@ services:
       - /dev/dri/:/dev/dri/
 ```
 
+> I have a pre-built image here `a15355447898a/intel-gpu-exporter:latest`.
+
 ## Metrics
 
 The following metrics are exposed:
